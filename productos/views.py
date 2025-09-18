@@ -7,5 +7,9 @@ from .models import Producto
 
 def index(request):
     productos = Producto.objects.all()
-    nombres = [producto.nombre for producto in productos]  # list comprehension
-    return HttpResponse(", ".join(nombres))
+
+    return render(
+        request,
+        'index.html',
+        context={'productos': productos}
+    )
