@@ -6,14 +6,14 @@ from django.contrib import admin
 
 
 class Categoria(models.Model):
-    nombre = models.CharField(max_length=255, default="CategoriaBlanca")
+    nombre = models.CharField(max_length=255, default="")
 
     def __str__(self):
         return str(self.nombre) if self.nombre else ""
 
 
 class Producto(models.Model):
-    nombre = models.CharField(max_length=255, default="MarcaBlanca")
+    nombre = models.CharField(max_length=255, default="")
     stock = models.IntegerField()
     puntaje = models.FloatField()
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)

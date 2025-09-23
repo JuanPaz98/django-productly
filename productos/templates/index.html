@@ -8,7 +8,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>Stock</th>
                 <th>Puntaje</th>
@@ -32,6 +31,8 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <a class="btn btn-primary" href="{% url 'nuevo_producto' %}"> + Nuevo Producto</a>
 </div>
 
 {% endblock %}
