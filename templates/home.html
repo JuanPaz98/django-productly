@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <h1 class="display-4 fw-bold mb-4">
+                        Bienvenido a <span class="text-warning">Productly</span>
+                    </h1>
+                    <p class="lead mb-4">
+                        Tu aplicación Django simple para gestionar productos de manera eficiente.
+                        Organiza, controla y administra tu inventario con facilidad.
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="{% url 'nuevo_producto' %}" class="btn btn-warning btn-lg px-4 py-2">
+                            <i class="bi bi-plus-circle me-2"></i>Agregar Producto
+                        </a>
+                        <a href="{% url 'index' %}" class="btn btn-outline-light btn-lg px-4 py-2">
+                            Consultar Productos
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image mt-4 mt-lg-0">
+                    <div class="bg-white bg-opacity-10 rounded-4 p-5">
+                        <i class="bi bi-box-seam display-1 text-warning"></i>
+                        <h3 class="mt-3 text-white-50">Gestión Inteligente</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div id="features" class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold text-dark">¿Por qué elegir Productly?</h2>
+            <p class="lead text-muted">Una solución simple pero poderosa para tu negocio</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                            style="width: 60px; height: 60px;">
+                            <i class="bi bi-lightning-charge text-primary fs-4"></i>
+                        </div>
+                        <h5 class="card-title">Rápido y Eficiente</h5>
+                        <p class="card-text text-muted">
+                            Agrega y gestiona productos en segundos. Interfaz intuitiva diseñada para la velocidad.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                            style="width: 60px; height: 60px;">
+                            <i class="bi bi-shield-check text-success fs-4"></i>
+                        </div>
+                        <h5 class="card-title">Seguro y Confiable</h5>
+                        <p class="card-text text-muted">
+                            Built with Django, garantizando la seguridad y estabilidad de tus datos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                            style="width: 60px; height: 60px;">
+                            <i class="bi bi-graph-up text-warning fs-4"></i>
+                        </div>
+                        <h5 class="card-title">Fácil de Usar</h5>
+                        <p class="card-text text-muted">
+                            No necesitas ser un experto. Diseñado para usuarios de todos los niveles.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<div class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-3">
+                <h3 class="display-6 fw-bold text-warning">100+</h3>
+                <p class="mb-0">Productos Gestionados</p>
+            </div>
+            <div class="col-md-3">
+                <h3 class="display-6 fw-bold text-warning">24/7</h3>
+                <p class="mb-0">Disponibilidad</p>
+            </div>
+            <div class="col-md-3">
+                <h3 class="display-6 fw-bold text-warning">0%</h3>
+                <p class="mb-0">Complicaciones</p>
+            </div>
+            <div class="col-md-3">
+                <h3 class="display-6 fw-bold text-warning">∞</h3>
+                <p class="mb-0">Posibilidades</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="py-5 bg-white">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h2 class="display-5 fw-bold text-dark mb-4">¿Listo para comenzar?</h2>
+                <p class="lead text-muted mb-4">
+                    Únete a la revolución de la gestión de productos. Simple, potente y completamente gratis.
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="{% url 'nuevo_producto' %}" class="btn btn-primary btn-lg px-5 py-3">
+                        <i class="bi bi-rocket-takeoff me-2"></i>Empezar Ahora
+                    </a>
+                    <a href="#" class="btn btn-outline-primary btn-lg px-5 py-3">
+                        <i class="bi bi-question-circle me-2"></i>¿Tienes dudas?
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="mb-0">Productly</h5>
+                <small class="text-muted">Gestión de productos simplificada</small>
+            </div>
+            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                <small class="text-muted">
+                    &copy; 2025 Productly. Hecho con 💙 y Django.
+                </small>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .min-vh-75 {
+        min-height: 75vh;
+    }
+
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+    }
+
+    @media (max-width: 768px) {
+        .display-4 {
+            font-size: 2.5rem;
+        }
+
+        .hero-content {
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
