@@ -1,30 +1,56 @@
-name: Deploy Productly
+name: CI/CD - Build, Push and Deploy
 
 on:
   push:
     branches:
-      - main # Solo se ejecuta cuando haces push a main
+      - main
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
+    outputs:
+      image: ${{ steps.build.outputs.image }}
     steps:
-      # 1. Clona tu repositorio
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # 2. Inicia sesión en Docker Hub
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 3. Construye y sube la imagen
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4
+        id: build
+        uses: docker/build-push-action@v5
         with:
-          context: .
           push: true
-          tags: juanpaz98/productly:latest
+          tags: |
+            juanpaz98/productly:latest
+            juanpaz98/productly:${{ github.sha }}
+
+  deploy-to-vps:
+    name: Deploy to VPS via SSH
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Opciones:
+            # 1) Si usas docker-compose y tienes docker-compose.yml en /home/usuario/productly:
+            if [ -f /home/${{ secrets.VPS_USER }}/productly/docker-compose.yml ]; then
+              cd /home/${{ secrets.VPS_USER }}/productly
+              docker compose pull
+              docker compose up -d
+            else
+              # 2) Si usas docker run (simple)
+              docker pull juanpaz98/productly:latest
+              docker stop productly || true
+              docker rm productly || true
+              docker run -d --restart unless-stopped -p 8000:8000 --name productly juanpaz98/productly:latest
+            fi
