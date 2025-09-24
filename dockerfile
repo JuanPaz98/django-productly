@@ -34,5 +34,6 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Comando por defecto (gunicorn recomendado en producción)
-CMD ["gunicorn", "productly.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "productly.wsgi:application", "--workers=3", "--timeout=60"]
+
 
