@@ -23,6 +23,9 @@ COPY requirements.txt .
 RUN pip install --upgrade pip \
     && pip install -r requirements.txt
 
+# Compila todos los assets en app/staticfiles
+RUN python manage.py collectstatic --noinput
+
 # Copiar el resto del proyecto
 COPY . .
 
