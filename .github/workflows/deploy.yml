@@ -64,4 +64,4 @@ jobs:
               $IMAGE
 
             # Aplicar migraciones
-            docker exec -T $CONTAINER_NAME python manage.py migrate --noinput
+            docker exec $CONTAINER_NAME python manage.py migrate --noinput
