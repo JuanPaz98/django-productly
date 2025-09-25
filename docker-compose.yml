@@ -3,7 +3,6 @@ services:
     build: .
     container_name: productly
     volumes:
-      - static_volume:/app/staticfiles
       - db_volume:/app/db 
     expose:
       - "8000"
@@ -24,5 +23,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  static_volume:
   db_volume:
