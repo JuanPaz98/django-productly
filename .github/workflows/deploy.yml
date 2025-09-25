@@ -41,16 +41,22 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # Opciones:
-            # 1) Si usas docker-compose y tienes docker-compose.yml en /home/usuario/productly:
-            if [ -f /home/${{ secrets.VPS_USER }}/productly/docker-compose.yml ]; then
-              cd /home/${{ secrets.VPS_USER }}/productly
-              docker compose pull
-              docker compose up -d
-            else
-              # 2) Si usas docker run (simple)
-              docker pull juanpaz98/productly:latest
-              docker stop productly || true
-              docker rm productly || true
-              docker run -d --restart unless-stopped -p 8000:8000 --name productly juanpaz98/productly:latest
-            fi
+            cd /home/${{ secrets.VPS_USER }}/productly
+
+            # Traer últimos cambios del repo (Dockerfile, nginx.conf, docker-compose.yml, etc.)
+            git pull origin main
+
+            # Actualizar imágenes desde Docker Hub
+            docker compose pull
+
+            # Reconstruir si hay cambios locales (opcional, por si cambias Dockerfile en VPS)
+            docker compose build
+
+            # Levantar servicios
+            docker compose up -d
+
+            # Aplicar migraciones automáticamente
+            docker compose exec -T web python manage.py migrate --noinput
+
+            # Limpiar imágenes y contenedores huérfanos
+            docker system prune -af
