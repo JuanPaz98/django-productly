@@ -8,8 +8,6 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    outputs:
-      image: ${{ steps.build.outputs.image }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,7 +19,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push Docker image
-        id: build
         uses: docker/build-push-action@v5
         with:
           push: true
@@ -30,7 +27,6 @@ jobs:
             juanpaz98/productly:${{ github.sha }}
 
   deploy-to-vps:
-    name: Deploy to VPS via SSH
     runs-on: ubuntu-latest
     needs: build-and-push
     steps:
@@ -41,22 +37,31 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/${{ secrets.VPS_USER }}/productly
+            # Variables
+            CONTAINER_NAME=productly
+            IMAGE=juanpaz98/productly:latest
+            STATIC_VOLUME=static_volume
+            DB_VOLUME=db_volume
 
-            # Traer últimos cambios del repo (Dockerfile, nginx.conf, docker-compose.yml, etc.)
-            git pull origin main
+            # Crear volúmenes si no existen
+            docker volume inspect $STATIC_VOLUME >/dev/null 2>&1 || docker volume create $STATIC_VOLUME
+            docker volume inspect $DB_VOLUME >/dev/null 2>&1 || docker volume create $DB_VOLUME
 
-            # Actualizar imágenes desde Docker Hub
-            docker compose pull
+            # Traer última imagen
+            docker pull $IMAGE
 
-            # Reconstruir solo si Dockerfile cambió (opcional)
-            docker compose build --no-cache
+            # Detener y eliminar contenedor antiguo
+            docker stop $CONTAINER_NAME || true
+            docker rm $CONTAINER_NAME || true
 
-            # Levantar servicios, forzando recreación de contenedores para reflejar cambios
-            docker compose up -d --force-recreate
+            # Levantar nuevo contenedor
+            docker run -d \
+              --restart unless-stopped \
+              -p 8000:8000 \
+              -v $STATIC_VOLUME:/app/staticfiles \
+              -v $DB_VOLUME:/app/db \
+              --name $CONTAINER_NAME \
+              $IMAGE
 
-            # Aplicar migraciones automáticamente en el contenedor web
-            docker compose exec -T web python manage.py migrate --noinput
-
-            # Limpiar imágenes y contenedores huérfanos
-            docker system prune -af
+            # Aplicar migraciones
+            docker exec -T $CONTAINER_NAME python manage.py migrate --noinput
