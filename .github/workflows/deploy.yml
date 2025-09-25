@@ -49,13 +49,13 @@ jobs:
             # Actualizar imágenes desde Docker Hub
             docker compose pull
 
-            # Reconstruir si hay cambios locales (opcional, por si cambias Dockerfile en VPS)
-            docker compose build
+            # Reconstruir solo si Dockerfile cambió (opcional)
+            docker compose build --no-cache
 
-            # Levantar servicios
-            docker compose up -d
+            # Levantar servicios, forzando recreación de contenedores para reflejar cambios
+            docker compose up -d --force-recreate
 
-            # Aplicar migraciones automáticamente
+            # Aplicar migraciones automáticamente en el contenedor web
             docker compose exec -T web python manage.py migrate --noinput
 
             # Limpiar imágenes y contenedores huérfanos
